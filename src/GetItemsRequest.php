@@ -133,7 +133,8 @@ class GetItemsRequest implements ModelInterface, ArrayAccess
         'offerCount' => 'setOfferCount',
         'partnerTag' => 'setPartnerTag',
         'partnerType' => 'setPartnerType',
-        'properties' => 'setProperties'
+        'properties' => 'setProperties',
+        'resources' => 'setResources'
     ];
 
     /**
@@ -152,7 +153,8 @@ class GetItemsRequest implements ModelInterface, ArrayAccess
         'offerCount' => 'getOfferCount',
         'partnerTag' => 'getPartnerTag',
         'partnerType' => 'getPartnerType',
-        'properties' => 'getProperties'
+        'properties' => 'getProperties',
+        'resources' => 'getResources'
     ];
 
     /**
