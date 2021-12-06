@@ -27,13 +27,13 @@
  * For more details, refer: https://webservices.amazon.com/paapi5/documentation/getbrowsenodes.html
  */
 
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\API\DefaultApi;
+use TheCodeBunny\PaApi\API\DefaultApi;
 use TheCodeBunny\PaApi\ApiException;
 use TheCodeBunny\PaApi\Configuration;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\GetBrowseNodesRequest;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\GetBrowseNodesResource;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\PartnerType;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\ProductAdvertisingAPIClientException;
+use TheCodeBunny\PaApi\GetBrowseNodesRequest;
+use TheCodeBunny\PaApi\GetBrowseNodesResource;
+use TheCodeBunny\PaApi\PartnerType;
+use TheCodeBunny\PaApi\ProductAdvertisingAPIClientException;
 
 require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
 
@@ -42,7 +42,7 @@ require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
  *
  * @param array $browseNodes Browse nodes value.
  *
- * @return array of \TheCodeBunny\PaApi\com\amazon\paapi5\v1\BrowseNode mapped to Browse Node id.
+ * @return array of \TheCodeBunny\PaApi\BrowseNode mapped to Browse Node id.
  */
 function parseResponse($browseNodes)
 {

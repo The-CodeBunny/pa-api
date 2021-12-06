@@ -27,13 +27,13 @@
  * For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-items.html
  */
 
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\api\DefaultApi;
+use TheCodeBunny\PaApi\api\DefaultApi;
 use TheCodeBunny\PaApi\ApiException;
 use TheCodeBunny\PaApi\Configuration;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\GetItemsRequest;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\GetItemsResource;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\PartnerType;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\ProductAdvertisingAPIClientException;
+use TheCodeBunny\PaApi\GetItemsRequest;
+use TheCodeBunny\PaApi\GetItemsResource;
+use TheCodeBunny\PaApi\PartnerType;
+use TheCodeBunny\PaApi\ProductAdvertisingAPIClientException;
 
 require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
 
@@ -42,7 +42,7 @@ require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
  *
  * @param array $items Items value.
  *
- * @return array of \TheCodeBunny\PaApi\com\amazon\paapi5\v1\Item mapped to ASIN.
+ * @return array of \TheCodeBunny\PaApi\Item mapped to ASIN.
  */
 function parseResponse($items)
 {

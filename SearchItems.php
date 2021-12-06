@@ -27,13 +27,13 @@
  * For more details, refer: https://webservices.amazon.com/paapi5/documentation/search-items.html
  */
 
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\api\DefaultApi;
+use TheCodeBunny\PaApi\api\DefaultApi;
 use TheCodeBunny\PaApi\ApiException;
 use TheCodeBunny\PaApi\Configuration;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\SearchItemsRequest;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\SearchItemsResource;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\PartnerType;
-use TheCodeBunny\PaApi\com\amazon\paapi5\v1\ProductAdvertisingAPIClientException;
+use TheCodeBunny\PaApi\SearchItemsRequest;
+use TheCodeBunny\PaApi\SearchItemsResource;
+use TheCodeBunny\PaApi\PartnerType;
+use TheCodeBunny\PaApi\ProductAdvertisingAPIClientException;
 
 require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
 
