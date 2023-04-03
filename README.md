@@ -6,7 +6,7 @@ Note: This is just wrapper around official PHP SDK for amazon [Product Advertisi
 ## Installation
 1. `composer require thecodebunny/pa-api`
 2. Laravel 6.0 or earlier
-3. `php artisan vendor:publish --provider="TheCodeBunny\PaApi\LaravelAmazonPaapi5ServiceProvider" --tag="config"` will create a `config/amazon-api-key.php` file.
+3. `php artisan vendor:publish --provider="TheCodeBunny\PaApi\LaravelTheCodeBunnyPaApiServiceProvider" --tag="config"` will create a `config/amazon-api-key.php` file.
 4. Add your Amazon access and secret keys into the your `.env` file: 
 ```
 AMAZON_PRODUCTS_ACCESS_KEY=youAccessKey

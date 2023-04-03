@@ -15,7 +15,7 @@ class PaApiServiceProvider extends ServiceProvider
     public function register()
     {
 
-        $this->app->singleton('AmazonPaapi5', function($app) {
+        $this->app->singleton('TheCodeBunnyPaApi', function($app) {
             $config = new Configuration();
 			$config->setAccessKey(config('amazon-api-key.access_key', env('AMAZON_PAAPI5_ACCESS_KEY')));
 			$config->setSecretKey(config('amazon-api-key.secret_key', env('AMAZON_PAAPI5_SECRET_KEY')));

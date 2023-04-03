@@ -22,7 +22,7 @@
                 "PaApiServiceProvider"
             ],
             "aliases": {
-                "AmazonPaapi5": "TheCodeBunny\\PaApi\\Facades\\AmazonAPI"
+                "TheCodeBunnyPaApi": "TheCodeBunny\\PaApi\\Facades\\AmazonAPI"
             }
         }
     },

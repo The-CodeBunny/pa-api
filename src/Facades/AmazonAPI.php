@@ -12,6 +12,6 @@ class AmazonAPI extends Facade
 	 */
 	protected static function getFacadeAccessor()
 	{
-		return 'AmazonPaapi5';
+		return 'TheCodeBunnyPaApi';
 	}
 }
