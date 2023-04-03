@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace TheCodeBunny\PaApi\Core\api;
+namespace TheCodeBunny\PaApi\Core;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;

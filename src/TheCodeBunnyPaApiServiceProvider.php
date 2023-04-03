@@ -5,7 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use TheCodeBunny\PaApi\Configuration;
 use GuzzleHttp\Client;
 
-class LaravelAmazonPaapi5ServiceProvider extends ServiceProvider
+class TheCodeBunnyPaApiServiceProvider extends ServiceProvider
 {
     /**
      * Register the application services.
