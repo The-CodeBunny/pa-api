@@ -1,31 +1,33 @@
 {
     "name": "thecodebunny/pa-api",
-    "description": "Code from Amazon to support the Amazon Product Advertising API v5, PHP SDK.",
+    "description": "",
+    "version" : "1.0.3",
     "type": "library",
-    "keywords": [
-        "amazon",
-        "php",
-        "sdk",
-        "api"
-    ],
-    "homepage": "https://webservices.amazon.com/paapi5/documentation/index.html",
     "license": "Apache-2.0",
-    "authors": [{
-            "name": "Product Advertising API Team"
-        },
+    "authors": [
         {
-            "name": "Hemang Vyas",
-            "email": "thecodebunny@gmail.com"
+            "name": "Hemang Vyas (TheCodeBunny)",
+            "email": "thecodebunny@mail.com"
         }
     ],
-    "require": {
-        "php": ">=5.5",
-        "guzzlehttp/guzzle": "^7.0.1"
-    },
+    "minimum-stability": "stable",
     "autoload": {
-        "psr-4": { "TheCodeBunny\\PaApi\\": "src/" }
+        "psr-4": { 
+            "TheCodeBunny\\PaApi\\" : "src/"
+        }
     },
-    "require-dev": {
-
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TheCodeBunny\\PaApi\\LaravelAmazonPaapi5ServiceProvider"
+            ],
+            "aliases": {
+                "AmazonPaapi5": "TheCodeBunny\\PaApi\\Facades\\AmazonAPI"
+            }
+        }
+    },
+    "require": {
+        "php" : ">=7.2",
+        "guzzlehttp/guzzle" : "^6.5"
     }
 }
