@@ -19,7 +19,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "PaApiServiceProvider"
+                "TheCodeBunny\\PaApi\\PaApiServiceProvider"
             ],
             "aliases": {
                 "TheCodeBunnyPaApi": "TheCodeBunny\\PaApi\\Facades\\AmazonAPI"
