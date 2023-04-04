@@ -16,6 +16,11 @@
             "TheCodeBunny\\PaApi\\" : "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "TheCodeBunny\\PaApi\\" : "src/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
