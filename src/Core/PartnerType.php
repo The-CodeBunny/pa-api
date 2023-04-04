@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -13,8 +14,10 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace TheCodeBunny\PaApi\Core;
-use TheCodeBunny\PaApi\ObjectSerializer;
+
+use \TheCodeBunny\PaApi\ObjectSerializer;
 
 /**
  * PartnerType Class Doc Comment
@@ -29,7 +32,7 @@ class PartnerType
      * Possible values of this enum
      */
     const ASSOCIATES = 'Associates';
-    
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -41,5 +44,3 @@ class PartnerType
         ];
     }
 }
-
-

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -13,10 +14,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace TheCodeBunny\PaApi\Core;
 
 use \ArrayAccess;
-use TheCodeBunny\PaApi\ObjectSerializer;
+use \TheCodeBunny\PaApi\ObjectSerializer;
 
 /**
  * Item Class Doc Comment
@@ -44,6 +46,7 @@ class Item implements ModelInterface, ArrayAccess
     protected static $swaggerTypes = [
         'aSIN' => 'string',
         'browseNodeInfo' => '\TheCodeBunny\PaApi\Core\BrowseNodeInfo',
+        'customerReviews' => '\TheCodeBunny\PaApi\Core\CustomerReviews',
         'detailPageURL' => 'string',
         'images' => '\TheCodeBunny\PaApi\Core\Images',
         'itemInfo' => '\TheCodeBunny\PaApi\Core\ItemInfo',
@@ -62,6 +65,7 @@ class Item implements ModelInterface, ArrayAccess
     protected static $swaggerFormats = [
         'aSIN' => null,
         'browseNodeInfo' => null,
+        'customerReviews' => null,
         'detailPageURL' => null,
         'images' => null,
         'itemInfo' => null,
@@ -101,6 +105,7 @@ class Item implements ModelInterface, ArrayAccess
     protected static $attributeMap = [
         'aSIN' => 'ASIN',
         'browseNodeInfo' => 'BrowseNodeInfo',
+        'customerReviews' => 'CustomerReviews',
         'detailPageURL' => 'DetailPageURL',
         'images' => 'Images',
         'itemInfo' => 'ItemInfo',
@@ -119,6 +124,7 @@ class Item implements ModelInterface, ArrayAccess
     protected static $setters = [
         'aSIN' => 'setASIN',
         'browseNodeInfo' => 'setBrowseNodeInfo',
+        'customerReviews' => 'setCustomerReviews',
         'detailPageURL' => 'setDetailPageURL',
         'images' => 'setImages',
         'itemInfo' => 'setItemInfo',
@@ -137,6 +143,7 @@ class Item implements ModelInterface, ArrayAccess
     protected static $getters = [
         'aSIN' => 'getASIN',
         'browseNodeInfo' => 'getBrowseNodeInfo',
+        'customerReviews' => 'getCustomerReviews',
         'detailPageURL' => 'getDetailPageURL',
         'images' => 'getImages',
         'itemInfo' => 'getItemInfo',
@@ -188,9 +195,9 @@ class Item implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    
 
-    
+
+
 
     /**
      * Associative array for storing property values
@@ -209,6 +216,7 @@ class Item implements ModelInterface, ArrayAccess
     {
         $this->container['aSIN'] = isset($data['aSIN']) ? $data['aSIN'] : null;
         $this->container['browseNodeInfo'] = isset($data['browseNodeInfo']) ? $data['browseNodeInfo'] : null;
+        $this->container['customerReviews'] = isset($data['customerReviews']) ? $data['customerReviews'] : null;
         $this->container['detailPageURL'] = isset($data['detailPageURL']) ? $data['detailPageURL'] : null;
         $this->container['images'] = isset($data['images']) ? $data['images'] : null;
         $this->container['itemInfo'] = isset($data['itemInfo']) ? $data['itemInfo'] : null;
@@ -239,8 +247,7 @@ class Item implements ModelInterface, ArrayAccess
      */
     public function valid()
     {
-
-        return true;
+        return count($this->listInvalidProperties()) === 0;
     }
 
 
@@ -288,6 +295,30 @@ class Item implements ModelInterface, ArrayAccess
     public function setBrowseNodeInfo($browseNodeInfo)
     {
         $this->container['browseNodeInfo'] = $browseNodeInfo;
+
+        return $this;
+    }
+
+    /**
+     * Gets customerReviews
+     *
+     * @return \TheCodeBunny\PaApi\Core\CustomerReviews
+     */
+    public function getCustomerReviews()
+    {
+        return $this->container['customerReviews'];
+    }
+
+    /**
+     * Sets customerReviews
+     *
+     * @param \TheCodeBunny\PaApi\Core\CustomerReviews $customerReviews customerReviews
+     *
+     * @return $this
+     */
+    public function setCustomerReviews($customerReviews)
+    {
+        $this->container['customerReviews'] = $customerReviews;
 
         return $this;
     }
@@ -490,7 +521,7 @@ class Item implements ModelInterface, ArrayAccess
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -502,7 +533,7 @@ class Item implements ModelInterface, ArrayAccess
      *
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return isset($this->container[$offset]) ? $this->container[$offset] : null;
     }
@@ -515,7 +546,7 @@ class Item implements ModelInterface, ArrayAccess
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -531,7 +562,7 @@ class Item implements ModelInterface, ArrayAccess
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->container[$offset]);
     }
@@ -553,5 +584,3 @@ class Item implements ModelInterface, ArrayAccess
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

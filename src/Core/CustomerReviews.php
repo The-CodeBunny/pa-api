@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -13,19 +14,20 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace TheCodeBunny\PaApi\Core;
 
 use \ArrayAccess;
-use TheCodeBunny\PaApi\ObjectSerializer;
+use \TheCodeBunny\PaApi\ObjectSerializer;
 
 /**
- * BrowseNodeChildren Class Doc Comment
+ * CustomerReviews Class Doc Comment
  *
  * @category Class
  * @package  TheCodeBunny\PaApi
  * @author   Product Advertising API team
  */
-class BrowseNodeChildren implements ModelInterface, ArrayAccess
+class CustomerReviews implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -34,7 +36,7 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $swaggerModelName = 'BrowseNodeChildren';
+    protected static $swaggerModelName = 'CustomerReviews';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -42,7 +44,8 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
-        
+        'count' => 'int',
+        'starRating' => '\TheCodeBunny\PaApi\Core\Rating'
     ];
 
     /**
@@ -51,7 +54,8 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
-        
+        'count' => 'int32',
+        'starRating' => null
     ];
 
     /**
@@ -81,7 +85,8 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        
+        'count' => 'Count',
+        'starRating' => 'StarRating'
     ];
 
     /**
@@ -90,7 +95,8 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        
+        'count' => 'setCount',
+        'starRating' => 'setStarRating'
     ];
 
     /**
@@ -99,7 +105,8 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        
+        'count' => 'getCount',
+        'starRating' => 'getStarRating'
     ];
 
     /**
@@ -143,9 +150,9 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    
 
-    
+
+
 
     /**
      * Associative array for storing property values
@@ -162,6 +169,8 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
+        $this->container['count'] = isset($data['count']) ? $data['count'] : null;
+        $this->container['starRating'] = isset($data['starRating']) ? $data['starRating'] : null;
     }
 
     /**
@@ -171,7 +180,7 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      */
     public function listInvalidProperties()
     {
-        $invalidProperties = parent::listInvalidProperties();
+        $invalidProperties = [];
 
         return $invalidProperties;
     }
@@ -184,13 +193,57 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      */
     public function valid()
     {
-        if (!parent::valid()) {
-            return false;
-        }
-
-        return true;
+        return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets count
+     *
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->container['count'];
+    }
+
+    /**
+     * Sets count
+     *
+     * @param int $count count
+     *
+     * @return $this
+     */
+    public function setCount($count)
+    {
+        $this->container['count'] = $count;
+
+        return $this;
+    }
+
+    /**
+     * Gets starRating
+     *
+     * @return \TheCodeBunny\PaApi\Core\Rating
+     */
+    public function getStarRating()
+    {
+        return $this->container['starRating'];
+    }
+
+    /**
+     * Sets starRating
+     *
+     * @param \TheCodeBunny\PaApi\Core\Rating $starRating starRating
+     *
+     * @return $this
+     */
+    public function setStarRating($starRating)
+    {
+        $this->container['starRating'] = $starRating;
+
+        return $this;
+    }
     /**
      * Returns true if offset exists. False otherwise.
      *
@@ -198,7 +251,7 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -210,7 +263,7 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      *
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return isset($this->container[$offset]) ? $this->container[$offset] : null;
     }
@@ -223,7 +276,7 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -239,7 +292,7 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->container[$offset]);
     }
@@ -261,5 +314,3 @@ class BrowseNodeChildren implements ModelInterface, ArrayAccess
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-

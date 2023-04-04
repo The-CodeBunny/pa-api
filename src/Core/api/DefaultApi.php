@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13,19 +14,20 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace TheCodeBunny\PaApi\Core;
+
+namespace TheCodeBunny\PaApi\Core\api;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use TheCodeBunny\PaApi\ApiException;
 use TheCodeBunny\PaApi\Configuration;
 use TheCodeBunny\PaApi\HeaderSelector;
 use TheCodeBunny\PaApi\ObjectSerializer;
-use TheCodeBunny\PaApi\Core\SignHelper;
-use http\Exception;
+use TheCodeBunny\PaApi\Core\auth\SignHelper;
 
 /**
  * DefaultApi Class Doc Comment
@@ -45,6 +47,11 @@ class DefaultApi
      * @var Configuration
      */
     protected $config;
+
+    /**
+     * @var HeaderSelector
+     */
+    protected $headerSelector;
 
     /**
      * @param ClientInterface $client
@@ -74,7 +81,7 @@ class DefaultApi
      *
      * @param  \TheCodeBunny\PaApi\Core\GetBrowseNodesRequest $getBrowseNodesRequest GetBrowseNodesRequest (required)
      *
-     * @throws TheCodeBunny\PaApi\ApiException on non-2xx response
+     * @throws \TheCodeBunny\PaApi\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \TheCodeBunny\PaApi\Core\GetBrowseNodesResponse
      */
@@ -89,7 +96,7 @@ class DefaultApi
      *
      * @param  \TheCodeBunny\PaApi\Core\GetBrowseNodesRequest $getBrowseNodesRequest GetBrowseNodesRequest (required)
      *
-     * @throws TheCodeBunny\PaApi\ApiException on non-2xx response
+     * @throws \TheCodeBunny\PaApi\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \TheCodeBunny\PaApi\Core\GetBrowseNodesResponse, HTTP status code, HTTP response headers (array of strings)
      */
@@ -141,7 +148,6 @@ class DefaultApi
                 $response->getStatusCode(),
                 $response->getHeaders()
             ];
-
         } catch (ApiException $e) {
             $responseBody = json_decode($e->getResponseBody());
             switch ($e->getCode()) {
@@ -201,7 +207,7 @@ class DefaultApi
     /**
      * Operation getBrowseNodesAsync
      *
-     * 
+     *
      *
      * @param  \TheCodeBunny\PaApi\Core\GetBrowseNodesRequest $getBrowseNodesRequest GetBrowseNodesRequest (required)
      *
@@ -221,7 +227,7 @@ class DefaultApi
     /**
      * Operation getBrowseNodesAsyncWithHttpInfo
      *
-     * 
+     *
      *
      * @param  \TheCodeBunny\PaApi\Core\GetBrowseNodesRequest $getBrowseNodesRequest GetBrowseNodesRequest (required)
      *
@@ -296,7 +302,7 @@ class DefaultApi
     protected function getBrowseNodesRequest($getBrowseNodesRequest)
     {
         // verify the required parameter 'getBrowseNodesRequest' is set
-        if ($getBrowseNodesRequest === null) {
+        if ($getBrowseNodesRequest === null || (is_array($getBrowseNodesRequest) && count($getBrowseNodesRequest) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $getBrowseNodesRequest when calling getBrowseNodes'
             );
@@ -348,13 +354,11 @@ class DefaultApi
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif ($headers['Content-Type'] === 'application/json') {
                 $httpBody = \GuzzleHttp\json_encode($formParams);
-
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -372,7 +376,7 @@ class DefaultApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -386,7 +390,7 @@ class DefaultApi
      *
      * @param  \TheCodeBunny\PaApi\Core\GetItemsRequest $getItemsRequest GetItemsRequest (required)
      *
-     * @throws TheCodeBunny\PaApi\ApiException on non-2xx response
+     * @throws \TheCodeBunny\PaApi\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \TheCodeBunny\PaApi\Core\GetItemsResponse
      */
@@ -401,7 +405,7 @@ class DefaultApi
      *
      * @param  \TheCodeBunny\PaApi\Core\GetItemsRequest $getItemsRequest GetItemsRequest (required)
      *
-     * @throws TheCodeBunny\PaApi\ApiException on non-2xx response
+     * @throws \TheCodeBunny\PaApi\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \TheCodeBunny\PaApi\Core\GetItemsResponse, HTTP status code, HTTP response headers (array of strings)
      */
@@ -453,7 +457,6 @@ class DefaultApi
                 $response->getStatusCode(),
                 $response->getHeaders()
             ];
-
         } catch (ApiException $e) {
             $responseBody = json_decode($e->getResponseBody());
             switch ($e->getCode()) {
@@ -484,7 +487,7 @@ class DefaultApi
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $responseBody,
-                        'TheCodeBunny\PaApi\Core\ProductAdvertisingAPIClientException',
+                        '\TheCodeBunny\PaApi\Core\ProductAdvertisingAPIClientException',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -513,7 +516,7 @@ class DefaultApi
     /**
      * Operation getItemsAsync
      *
-     * 
+     *
      *
      * @param  \TheCodeBunny\PaApi\Core\GetItemsRequest $getItemsRequest GetItemsRequest (required)
      *
@@ -533,7 +536,7 @@ class DefaultApi
     /**
      * Operation getItemsAsyncWithHttpInfo
      *
-     * 
+     *
      *
      * @param  \TheCodeBunny\PaApi\Core\GetItemsRequest $getItemsRequest GetItemsRequest (required)
      *
@@ -608,7 +611,7 @@ class DefaultApi
     protected function getItemsRequest($getItemsRequest)
     {
         // verify the required parameter 'getItemsRequest' is set
-        if ($getItemsRequest === null) {
+        if ($getItemsRequest === null || (is_array($getItemsRequest) && count($getItemsRequest) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $getItemsRequest when calling getItems'
             );
@@ -660,13 +663,11 @@ class DefaultApi
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif ($headers['Content-Type'] === 'application/json') {
                 $httpBody = \GuzzleHttp\json_encode($formParams);
-
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -684,7 +685,7 @@ class DefaultApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -698,7 +699,7 @@ class DefaultApi
      *
      * @param  \TheCodeBunny\PaApi\Core\GetVariationsRequest $getVariationsRequest GetVariationsRequest (required)
      *
-     * @throws TheCodeBunny\PaApi\ApiException on non-2xx response
+     * @throws \TheCodeBunny\PaApi\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \TheCodeBunny\PaApi\Core\GetVariationsResponse
      */
@@ -713,7 +714,7 @@ class DefaultApi
      *
      * @param  \TheCodeBunny\PaApi\Core\GetVariationsRequest $getVariationsRequest GetVariationsRequest (required)
      *
-     * @throws TheCodeBunny\PaApi\ApiException on non-2xx response
+     * @throws \TheCodeBunny\PaApi\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \TheCodeBunny\PaApi\Core\GetVariationsResponse, HTTP status code, HTTP response headers (array of strings)
      */
@@ -765,7 +766,6 @@ class DefaultApi
                 $response->getStatusCode(),
                 $response->getHeaders()
             ];
-
         } catch (ApiException $e) {
             $responseBody = json_decode($e->getResponseBody());
             switch ($e->getCode()) {
@@ -825,7 +825,7 @@ class DefaultApi
     /**
      * Operation getVariationsAsync
      *
-     * 
+     *
      *
      * @param  \TheCodeBunny\PaApi\Core\GetVariationsRequest $getVariationsRequest GetVariationsRequest (required)
      *
@@ -845,7 +845,7 @@ class DefaultApi
     /**
      * Operation getVariationsAsyncWithHttpInfo
      *
-     * 
+     *
      *
      * @param  \TheCodeBunny\PaApi\Core\GetVariationsRequest $getVariationsRequest GetVariationsRequest (required)
      *
@@ -920,7 +920,7 @@ class DefaultApi
     protected function getVariationsRequest($getVariationsRequest)
     {
         // verify the required parameter 'getVariationsRequest' is set
-        if ($getVariationsRequest === null) {
+        if ($getVariationsRequest === null || (is_array($getVariationsRequest) && count($getVariationsRequest) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $getVariationsRequest when calling getVariations'
             );
@@ -972,13 +972,11 @@ class DefaultApi
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif ($headers['Content-Type'] === 'application/json') {
                 $httpBody = \GuzzleHttp\json_encode($formParams);
-
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -996,7 +994,7 @@ class DefaultApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -1010,7 +1008,7 @@ class DefaultApi
      *
      * @param  \TheCodeBunny\PaApi\Core\SearchItemsRequest $searchItemsRequest SearchItemsRequest (required)
      *
-     * @throws TheCodeBunny\PaApi\ApiException on non-2xx response
+     * @throws \TheCodeBunny\PaApi\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \TheCodeBunny\PaApi\Core\SearchItemsResponse
      */
@@ -1025,7 +1023,7 @@ class DefaultApi
      *
      * @param  \TheCodeBunny\PaApi\Core\SearchItemsRequest $searchItemsRequest SearchItemsRequest (required)
      *
-     * @throws TheCodeBunny\PaApi\ApiException on non-2xx response
+     * @throws \TheCodeBunny\PaApi\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \TheCodeBunny\PaApi\Core\SearchItemsResponse, HTTP status code, HTTP response headers (array of strings)
      */
@@ -1077,7 +1075,6 @@ class DefaultApi
                 $response->getStatusCode(),
                 $response->getHeaders()
             ];
-
         } catch (ApiException $e) {
             $responseBody = json_decode($e->getResponseBody());
             switch ($e->getCode()) {
@@ -1137,7 +1134,7 @@ class DefaultApi
     /**
      * Operation searchItemsAsync
      *
-     * 
+     *
      *
      * @param  \TheCodeBunny\PaApi\Core\SearchItemsRequest $searchItemsRequest SearchItemsRequest (required)
      *
@@ -1157,7 +1154,7 @@ class DefaultApi
     /**
      * Operation searchItemsAsyncWithHttpInfo
      *
-     * 
+     *
      *
      * @param  \TheCodeBunny\PaApi\Core\SearchItemsRequest $searchItemsRequest SearchItemsRequest (required)
      *
@@ -1232,7 +1229,7 @@ class DefaultApi
     protected function searchItemsRequest($searchItemsRequest)
     {
         // verify the required parameter 'searchItemsRequest' is set
-        if ($searchItemsRequest === null) {
+        if ($searchItemsRequest === null || (is_array($searchItemsRequest) && count($searchItemsRequest) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $searchItemsRequest when calling searchItems'
             );
@@ -1284,13 +1281,11 @@ class DefaultApi
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
-
             } elseif ($headers['Content-Type'] === 'application/json') {
                 $httpBody = \GuzzleHttp\json_encode($formParams);
-
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -1308,7 +1303,7 @@ class DefaultApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),

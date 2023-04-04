@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -13,10 +14,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace TheCodeBunny\PaApi\Core;
 
 use \ArrayAccess;
-use TheCodeBunny\PaApi\ObjectSerializer;
+use \TheCodeBunny\PaApi\ObjectSerializer;
 
 /**
  * TechnicalInfo Class Doc Comment
@@ -42,6 +44,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerTypes = [
+        'energyEfficiencyClass' => '\TheCodeBunny\PaApi\Core\SingleStringValuedAttribute',
         'formats' => '\TheCodeBunny\PaApi\Core\MultiValuedAttribute'
     ];
 
@@ -51,6 +54,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $swaggerFormats = [
+        'energyEfficiencyClass' => null,
         'formats' => null
     ];
 
@@ -81,6 +85,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
+        'energyEfficiencyClass' => 'EnergyEfficiencyClass',
         'formats' => 'Formats'
     ];
 
@@ -90,6 +95,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
+        'energyEfficiencyClass' => 'setEnergyEfficiencyClass',
         'formats' => 'setFormats'
     ];
 
@@ -99,6 +105,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
+        'energyEfficiencyClass' => 'getEnergyEfficiencyClass',
         'formats' => 'getFormats'
     ];
 
@@ -143,9 +150,9 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    
 
-    
+
+
 
     /**
      * Associative array for storing property values
@@ -162,6 +169,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
+        $this->container['energyEfficiencyClass'] = isset($data['energyEfficiencyClass']) ? $data['energyEfficiencyClass'] : null;
         $this->container['formats'] = isset($data['formats']) ? $data['formats'] : null;
     }
 
@@ -185,10 +193,33 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      */
     public function valid()
     {
-
-        return true;
+        return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets energyEfficiencyClass
+     *
+     * @return \TheCodeBunny\PaApi\Core\SingleStringValuedAttribute
+     */
+    public function getEnergyEfficiencyClass()
+    {
+        return $this->container['energyEfficiencyClass'];
+    }
+
+    /**
+     * Sets energyEfficiencyClass
+     *
+     * @param \TheCodeBunny\PaApi\Core\SingleStringValuedAttribute $energyEfficiencyClass energyEfficiencyClass
+     *
+     * @return $this
+     */
+    public function setEnergyEfficiencyClass($energyEfficiencyClass)
+    {
+        $this->container['energyEfficiencyClass'] = $energyEfficiencyClass;
+
+        return $this;
+    }
 
     /**
      * Gets formats
@@ -220,7 +251,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -232,7 +263,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      *
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return isset($this->container[$offset]) ? $this->container[$offset] : null;
     }
@@ -245,7 +276,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -261,7 +292,7 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->container[$offset]);
     }
@@ -283,5 +314,3 @@ class TechnicalInfo implements ModelInterface, ArrayAccess
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-
