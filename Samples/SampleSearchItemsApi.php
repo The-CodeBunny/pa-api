@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2023 Hemang Vyas. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -22,37 +22,22 @@
  */
 
 /*
- * This sample code snippet is for TheCodeBunny\PaApi 5.0's GetItems API
+ * This sample code snippet is for TheCodeBunny\PaApi 5.0's SearchItems API
  *
- * For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-items.html
+ * For more details, refer: https://webservices.amazon.com/paapi5/documentation/search-items.html
  */
 
 use TheCodeBunny\PaApi\ApiException;
 use TheCodeBunny\PaApi\Core\api\DefaultApi;
-use TheCodeBunny\PaApi\Core\GetItemsRequest;
-use TheCodeBunny\PaApi\Core\GetItemsResource;
 use TheCodeBunny\PaApi\Core\PartnerType;
 use TheCodeBunny\PaApi\Core\ProductAdvertisingAPIClientException;
+use TheCodeBunny\PaApi\Core\SearchItemsRequest;
+use TheCodeBunny\PaApi\Core\SearchItemsResource;
 use TheCodeBunny\PaApi\Configuration;
 
-require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
+// require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
 
-/**
- * Returns the array of items mapped to ASIN
- *
- * @param array $items Items value.
- * @return array of \TheCodeBunny\PaApi\Core\Item mapped to ASIN.
- */
-function parseResponse($items)
-{
-    $mappedResponse = [];
-    foreach ($items as $item) {
-        $mappedResponse[$item->getASIN()] = $item;
-    }
-    return $mappedResponse;
-}
-
-function getItems()
+function searchItems()
 {
     $config = new Configuration();
 
@@ -86,26 +71,39 @@ function getItems()
 
     # Request initialization
 
-    # Choose item id(s)
-    $itemIds = ["059035342X", "B00X4WHP55", "1401263119"];
+    # Specify keywords
+    $keyword = 'Harry Potter';
 
     /*
-     * Choose resources you want from GetItemsResource enum
-     * For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-items.html#resources-parameter
+     * Specify the category in which search request is to be made
+     * For more details, refer:
+     * https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html
+     */
+    $searchIndex = "All";
+
+    # Specify item count to be returned in search result
+    $itemCount = 1;
+
+    /*
+     * Choose resources you want from SearchItemsResource enum
+     * For more details,
+     * refer: https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter
      */
     $resources = [
-        GetItemsResource::ITEM_INFOTITLE,
-        GetItemsResource::OFFERSLISTINGSPRICE];
+        SearchItemsResource::ITEM_INFOTITLE,
+        SearchItemsResource::OFFERSLISTINGSPRICE];
 
     # Forming the request
-    $getItemsRequest = new GetItemsRequest();
-    $getItemsRequest->setItemIds($itemIds);
-    $getItemsRequest->setPartnerTag($partnerTag);
-    $getItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
-    $getItemsRequest->setResources($resources);
+    $searchItemsRequest = new SearchItemsRequest();
+    $searchItemsRequest->setSearchIndex($searchIndex);
+    $searchItemsRequest->setKeywords($keyword);
+    $searchItemsRequest->setItemCount($itemCount);
+    $searchItemsRequest->setPartnerTag($partnerTag);
+    $searchItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
+    $searchItemsRequest->setResources($resources);
 
     # Validating request
-    $invalidPropertyList = $getItemsRequest->listInvalidProperties();
+    $invalidPropertyList = $searchItemsRequest->listInvalidProperties();
     $length = count($invalidPropertyList);
     if ($length > 0) {
         echo "Error forming the request", PHP_EOL;
@@ -117,48 +115,41 @@ function getItems()
 
     # Sending the request
     try {
-        $getItemsResponse = $apiInstance->getItems($getItemsRequest);
+        $searchItemsResponse = $apiInstance->searchItems($searchItemsRequest);
 
         echo 'API called successfully', PHP_EOL;
-        echo 'Complete Response: ', $getItemsResponse, PHP_EOL;
+        echo 'Complete Response: ', $searchItemsResponse, PHP_EOL;
 
         # Parsing the response
-        if ($getItemsResponse->getItemsResult() !== null) {
-            echo 'Printing all item information in ItemsResult:', PHP_EOL;
-            if ($getItemsResponse->getItemsResult()->getItems() !== null) {
-                $responseList = parseResponse($getItemsResponse->getItemsResult()->getItems());
-
-                foreach ($itemIds as $itemId) {
-                    echo 'Printing information about the itemId: ', $itemId, PHP_EOL;
-                    $item = $responseList[$itemId];
-                    if ($item !== null) {
-                        if ($item->getASIN()) {
-                            echo 'ASIN: ', $item->getASIN(), PHP_EOL;
-                        }
-                        if ($item->getItemInfo() !== null and $item->getItemInfo()->getTitle() !== null
-                            and $item->getItemInfo()->getTitle()->getDisplayValue() !== null) {
-                            echo 'Title: ', $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
-                        }
-                        if ($item->getDetailPageURL() !== null) {
-                            echo 'Detail Page URL: ', $item->getDetailPageURL(), PHP_EOL;
-                        }
-                        if ($item->getOffers() !== null and
-                            $item->getOffers()->getListings() !== null
-                            and $item->getOffers()->getListings()[0]->getPrice() !== null
-                            and $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
-                            echo 'Buying price: ', $item->getOffers()->getListings()[0]->getPrice()
-                                ->getDisplayAmount(), PHP_EOL;
-                        }
-                    } else {
-                        echo "Item not found, check errors", PHP_EOL;
-                    }
+        if ($searchItemsResponse->getSearchResult() !== null) {
+            echo 'Printing first item information in SearchResult:', PHP_EOL;
+            $item = $searchItemsResponse->getSearchResult()->getItems()[0];
+            if ($item !== null) {
+                if ($item->getASIN() !== null) {
+                    echo "ASIN: ", $item->getASIN(), PHP_EOL;
+                }
+                if ($item->getDetailPageURL() !== null) {
+                    echo "DetailPageURL: ", $item->getDetailPageURL(), PHP_EOL;
+                }
+                if ($item->getItemInfo() !== null
+                    and $item->getItemInfo()->getTitle() !== null
+                    and $item->getItemInfo()->getTitle()->getDisplayValue() !== null) {
+                    echo "Title: ", $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
+                }
+                if ($item->getOffers() !== null
+                    and $item->getOffers() !== null
+                    and $item->getOffers()->getListings() !== null
+                    and $item->getOffers()->getListings()[0]->getPrice() !== null
+                    and $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
+                    echo "Buying price: ", $item->getOffers()->getListings()[0]->getPrice()
+                        ->getDisplayAmount(), PHP_EOL;
                 }
             }
         }
-        if ($getItemsResponse->getErrors() !== null) {
+        if ($searchItemsResponse->getErrors() !== null) {
             echo PHP_EOL, 'Printing Errors:', PHP_EOL, 'Printing first error object from list of errors', PHP_EOL;
-            echo 'Error code: ', $getItemsResponse->getErrors()[0]->getCode(), PHP_EOL;
-            echo 'Error message: ', $getItemsResponse->getErrors()[0]->getMessage(), PHP_EOL;
+            echo 'Error code: ', $searchItemsResponse->getErrors()[0]->getCode(), PHP_EOL;
+            echo 'Error message: ', $searchItemsResponse->getErrors()[0]->getMessage(), PHP_EOL;
         }
     } catch (ApiException $exception) {
         echo "Error calling PA-API 5.0!", PHP_EOL;
@@ -178,7 +169,7 @@ function getItems()
     }
 }
 
-function getItemsWithHttpInfo()
+function searchItemsWithHttpInfo()
 {
     $config = new Configuration();
 
@@ -212,26 +203,39 @@ function getItemsWithHttpInfo()
 
     # Request initialization
 
-    # Choose item id(s)
-    $itemIds = ["059035342X", "B00X4WHP55", "1401263119"];
+    # Specify keywords
+    $keyword = 'Harry Potter';
 
     /*
-     * Choose resources you want from GetItemsResource enum
-     * For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-items.html#resources-parameter
+     * Specify the category in which search request is to be made
+     * For more details, refer:
+     * https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html
+     */
+    $searchIndex = "All";
+
+    # Specify item count to be returned in search result
+    $itemCount = 1;
+
+    /*
+     * Choose resources you want from SearchItemsResource enum
+     * For more details, refer:
+     * https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter
      */
     $resources = [
-        GetItemsResource::ITEM_INFOTITLE,
-        GetItemsResource::OFFERSLISTINGSPRICE];
+        SearchItemsResource::ITEM_INFOTITLE,
+        SearchItemsResource::OFFERSLISTINGSPRICE];
 
     # Forming the request
-    $getItemsRequest = new GetItemsRequest();
-    $getItemsRequest->setItemIds($itemIds);
-    $getItemsRequest->setPartnerTag($partnerTag);
-    $getItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
-    $getItemsRequest->setResources($resources);
+    $searchItemsRequest = new SearchItemsRequest();
+    $searchItemsRequest->setSearchIndex($searchIndex);
+    $searchItemsRequest->setKeywords($keyword);
+    $searchItemsRequest->setItemCount($itemCount);
+    $searchItemsRequest->setPartnerTag($partnerTag);
+    $searchItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
+    $searchItemsRequest->setResources($resources);
 
     # Validating request
-    $invalidPropertyList = $getItemsRequest->listInvalidProperties();
+    $invalidPropertyList = $searchItemsRequest->listInvalidProperties();
     $length = count($invalidPropertyList);
     if ($length > 0) {
         echo "Error forming the request", PHP_EOL;
@@ -243,7 +247,7 @@ function getItemsWithHttpInfo()
 
     # Sending the request
     try {
-        $responseWithHttpInfo = $apiInstance->getItemsWithHttpInfo($getItemsRequest);
+        $responseWithHttpInfo = $apiInstance->searchItemsWithHttpInfo($searchItemsRequest);
 
         echo 'API called successfully', PHP_EOL;
         echo 'Complete Response dump: ';
@@ -253,34 +257,28 @@ function getItemsWithHttpInfo()
 
         # Parsing the response
         $response = $responseWithHttpInfo[0];
-        if ($response->getItemsResult() !== null) {
-            echo 'Printing all item information in ItemResult:', PHP_EOL;
-            if ($response->getItemsResult()->getItems() !== null) {
-                $responseList = parseResponse($response->getItemsResult()->getItems());
-
-                foreach ($itemIds as $itemId) {
-                    echo 'Printing information about the itemId: ', $itemId, PHP_EOL;
-                    $item = $responseList[$itemId];
-                    if ($item !== null) {
-                        if ($item->getASIN()) {
-                            echo 'ASIN: ', $item->getASIN(), PHP_EOL;
-                        }
-                        if ($item->getItemInfo() !== null and $item->getItemInfo()->getTitle() !== null
-                            and $item->getItemInfo()->getTitle()->getDisplayValue() !== null) {
-                            echo 'Title: ', $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
-                        }
-                        if ($item->getDetailPageURL() !== null) {
-                            echo 'Detail Page URL: ', $item->getDetailPageURL(), PHP_EOL;
-                        }
-                        if ($item->getOffers() !== null and $item->getOffers()->getListings() !== null
-                            and $item->getOffers()->getListings()[0]->getPrice() !== null
-                            and $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
-                            echo 'Buying price: ', $item->getOffers()->getListings()[0]->getPrice()
-                                ->getDisplayAmount(), PHP_EOL;
-                        }
-                    } else {
-                        echo "Item not found, check errors", PHP_EOL;
-                    }
+        if ($response->getSearchResult() !== null) {
+            echo 'Printing first item information in SearchResult:', PHP_EOL;
+            $item = $response->getSearchResult()->getItems()[0];
+            if ($item !== null) {
+                if ($item->getASIN() !== null) {
+                    echo "ASIN: ", $item->getASIN(), PHP_EOL;
+                }
+                if ($item->getDetailPageURL() !== null) {
+                    echo "DetailPageURL: ", $item->getDetailPageURL(), PHP_EOL;
+                }
+                if ($item->getItemInfo() !== null
+                    and $item->getItemInfo()->getTitle() !== null
+                    and $item->getItemInfo()->getTitle()->getDisplayValue() !== null) {
+                    echo "Title: ", $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
+                }
+                if ($item->getOffers() !== null
+                    and $item->getOffers() !== null
+                    and $item->getOffers()->getListings() !== null
+                    and $item->getOffers()->getListings()[0]->getPrice() !== null
+                    and $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
+                    echo "Buying price: ", $item->getOffers()->getListings()[0]->getPrice()
+                        ->getDisplayAmount(), PHP_EOL;
                 }
             }
         }
@@ -307,7 +305,7 @@ function getItemsWithHttpInfo()
     }
 }
 
-function getItemsAsync()
+function searchItemsAsync()
 {
     $config = new Configuration();
 
@@ -341,26 +339,39 @@ function getItemsAsync()
 
     # Request initialization
 
-    # Choose item id(s)
-    $itemIds = ["059035342X", "B00X4WHP55", "1401263119"];
+    # Specify keywords
+    $keyword = 'Harry Potter';
 
     /*
-     * Choose resources you want from GetItemsResource enum
-     * For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-items.html#resources-parameter
+     * Specify the category in which search request is to be made
+     * For more details, refer:
+     * https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html
+     */
+    $searchIndex = "All";
+
+    # Specify item count to be returned in search result
+    $itemCount = 1;
+
+    /*
+     * Choose resources you want from SearchItemsResource enum
+     * For more details, refer:
+     * https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter
      */
     $resources = [
-        GetItemsResource::ITEM_INFOTITLE,
-        GetItemsResource::OFFERSLISTINGSPRICE];
+        SearchItemsResource::ITEM_INFOTITLE,
+        SearchItemsResource::OFFERSLISTINGSPRICE];
 
     # Forming the request
-    $getItemsRequest = new GetItemsRequest();
-    $getItemsRequest->setItemIds($itemIds);
-    $getItemsRequest->setPartnerTag($partnerTag);
-    $getItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
-    $getItemsRequest->setResources($resources);
+    $searchItemsRequest = new SearchItemsRequest();
+    $searchItemsRequest->setSearchIndex($searchIndex);
+    $searchItemsRequest->setKeywords($keyword);
+    $searchItemsRequest->setItemCount($itemCount);
+    $searchItemsRequest->setPartnerTag($partnerTag);
+    $searchItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
+    $searchItemsRequest->setResources($resources);
 
     # Validating request
-    $invalidPropertyList = $getItemsRequest->listInvalidProperties();
+    $invalidPropertyList = $searchItemsRequest->listInvalidProperties();
     $length = count($invalidPropertyList);
     if ($length > 0) {
         echo "Error forming the request", PHP_EOL;
@@ -372,7 +383,7 @@ function getItemsAsync()
 
     # Sending the request
     try {
-        $promise = $apiInstance->getItemsAsync($getItemsRequest);
+        $promise = $apiInstance->searchItemsAsync($searchItemsRequest);
         $response = $promise->wait();
         $promise->then(
             function ($response) {
@@ -388,34 +399,28 @@ function getItemsAsync()
         echo 'Complete Response: ', $response, PHP_EOL;
 
         # Parsing the response
-        if ($response->getItemsResult() !== null) {
-            echo 'Printing all item information in ItemResult:', PHP_EOL;
-            if ($response->getItemsResult()->getItems() !== null) {
-                $responseList = parseResponse($response->getItemsResult()->getItems());
-
-                foreach ($itemIds as $itemId) {
-                    echo 'Printing information about the itemId: ', $itemId, PHP_EOL;
-                    $item = $responseList[$itemId];
-                    if ($item !== null) {
-                        if ($item->getASIN()) {
-                            echo 'ASIN: ', $item->getASIN(), PHP_EOL;
-                        }
-                        if ($item->getItemInfo() !== null and $item->getItemInfo()->getTitle() !== null
-                            and $item->getItemInfo()->getTitle()->getDisplayValue() !== null) {
-                            echo 'Title: ', $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
-                        }
-                        if ($item->getDetailPageURL() !== null) {
-                            echo 'Detail Page URL: ', $item->getDetailPageURL(), PHP_EOL;
-                        }
-                        if ($item->getOffers() !== null and $item->getOffers()->getListings() !== null
-                            and $item->getOffers()->getListings()[0]->getPrice() !== null
-                            and $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
-                            echo 'Buying price: ', $item->getOffers()->getListings()[0]->getPrice()
-                                ->getDisplayAmount(), PHP_EOL;
-                        }
-                    } else {
-                        echo "Item not found, check errors", PHP_EOL;
-                    }
+        if ($response->getSearchResult() !== null) {
+            echo 'Printing first item information in SearchResult:', PHP_EOL;
+            $item = $response->getSearchResult()->getItems()[0];
+            if ($item !== null) {
+                if ($item->getASIN() !== null) {
+                    echo "ASIN: ", $item->getASIN(), PHP_EOL;
+                }
+                if ($item->getDetailPageURL() !== null) {
+                    echo "DetailPageURL: ", $item->getDetailPageURL(), PHP_EOL;
+                }
+                if ($item->getItemInfo() !== null
+                    and $item->getItemInfo()->getTitle() !== null
+                    and $item->getItemInfo()->getTitle()->getDisplayValue() !== null) {
+                    echo "Title: ", $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
+                }
+                if ($item->getOffers() !== null
+                    and $item->getOffers() !== null
+                    and $item->getOffers()->getListings() !== null
+                    and $item->getOffers()->getListings()[0]->getPrice() !== null
+                    and $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
+                    echo "Buying price: ", $item->getOffers()->getListings()[0]->getPrice()
+                        ->getDisplayAmount(), PHP_EOL;
                 }
             }
         }
@@ -442,7 +447,7 @@ function getItemsAsync()
     }
 }
 
-function getItemsAsyncWithHttpInfo()
+function searchItemsAsyncWithHttpInfo()
 {
     $config = new Configuration();
 
@@ -476,26 +481,39 @@ function getItemsAsyncWithHttpInfo()
 
     # Request initialization
 
-    # Choose item id(s)
-    $itemIds = ["059035342X", "B00X4WHP55", "1401263119"];
+    # Specify keywords
+    $keyword = 'Harry Potter';
 
     /*
-     * Choose resources you want from GetItemsResource enum
-     * For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-items.html#resources-parameter
+     * Specify the category in which search request is to be made
+     * For more details, refer:
+     * https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html
+     */
+    $searchIndex = "All";
+
+    # Specify item count to be returned in search result
+    $itemCount = 1;
+
+    /*
+     * Choose resources you want from SearchItemsResource enum
+     * For more details, refer:
+     * https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter
      */
     $resources = [
-        GetItemsResource::ITEM_INFOTITLE,
-        GetItemsResource::OFFERSLISTINGSPRICE];
+        SearchItemsResource::ITEM_INFOTITLE,
+        SearchItemsResource::OFFERSLISTINGSPRICE];
 
     # Forming the request
-    $getItemsRequest = new GetItemsRequest();
-    $getItemsRequest->setItemIds($itemIds);
-    $getItemsRequest->setPartnerTag($partnerTag);
-    $getItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
-    $getItemsRequest->setResources($resources);
+    $searchItemsRequest = new SearchItemsRequest();
+    $searchItemsRequest->setSearchIndex($searchIndex);
+    $searchItemsRequest->setKeywords($keyword);
+    $searchItemsRequest->setItemCount($itemCount);
+    $searchItemsRequest->setPartnerTag($partnerTag);
+    $searchItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
+    $searchItemsRequest->setResources($resources);
 
     # Validating request
-    $invalidPropertyList = $getItemsRequest->listInvalidProperties();
+    $invalidPropertyList = $searchItemsRequest->listInvalidProperties();
     $length = count($invalidPropertyList);
     if ($length > 0) {
         echo "Error forming the request", PHP_EOL;
@@ -507,7 +525,7 @@ function getItemsAsyncWithHttpInfo()
 
     # Sending the request
     try {
-        $promise = $apiInstance->getItemsAsyncWithHttpInfo($getItemsRequest);
+        $promise = $apiInstance->searchItemsAsyncWithHttpInfo($searchItemsRequest);
         $responseWithHttpInfo = $promise->wait();
         $promise->then(
             function ($response) {
@@ -527,34 +545,28 @@ function getItemsAsyncWithHttpInfo()
 
         # Parsing the response
         $response = $responseWithHttpInfo[0];
-        if ($response->getItemsResult() !== null) {
-            echo 'Printing all item information in ItemResult:', PHP_EOL;
-            if ($response->getItemsResult()->getItems() !== null) {
-                $responseList = parseResponse($response->getItemsResult()->getItems());
-
-                foreach ($itemIds as $itemId) {
-                    echo 'Printing information about the itemId: ', $itemId, PHP_EOL;
-                    $item = $responseList[$itemId];
-                    if ($item !== null) {
-                        if ($item->getASIN()) {
-                            echo 'ASIN: ', $item->getASIN(), PHP_EOL;
-                        }
-                        if ($item->getItemInfo() !== null and $item->getItemInfo()->getTitle() !== null
-                            and $item->getItemInfo()->getTitle()->getDisplayValue() !== null) {
-                            echo 'Title: ', $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
-                        }
-                        if ($item->getDetailPageURL() !== null) {
-                            echo 'Detail Page URL: ', $item->getDetailPageURL(), PHP_EOL;
-                        }
-                        if ($item->getOffers() !== null and $item->getOffers()->getListings() !== null
-                            and $item->getOffers()->getListings()[0]->getPrice() !== null
-                            and $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
-                            echo 'Buying price: ', $item->getOffers()->getListings()[0]->getPrice()
-                                ->getDisplayAmount(), PHP_EOL;
-                        }
-                    } else {
-                        echo "Item not found, check errors", PHP_EOL;
-                    }
+        if ($response->getSearchResult() !== null) {
+            echo 'Printing first item information in SearchResult:', PHP_EOL;
+            $item = $response->getSearchResult()->getItems()[0];
+            if ($item !== null) {
+                if ($item->getASIN() !== null) {
+                    echo "ASIN: ", $item->getASIN(), PHP_EOL;
+                }
+                if ($item->getDetailPageURL() !== null) {
+                    echo "DetailPageURL: ", $item->getDetailPageURL(), PHP_EOL;
+                }
+                if ($item->getItemInfo() !== null
+                    and $item->getItemInfo()->getTitle() !== null
+                    and $item->getItemInfo()->getTitle()->getDisplayValue() !== null) {
+                    echo "Title: ", $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
+                }
+                if ($item->getOffers() !== null
+                    and $item->getOffers() !== null
+                    and $item->getOffers()->getListings() !== null
+                    and $item->getOffers()->getListings()[0]->getPrice() !== null
+                    and $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
+                    echo "Buying price: ", $item->getOffers()->getListings()[0]->getPrice()
+                        ->getDisplayAmount(), PHP_EOL;
                 }
             }
         }
@@ -581,7 +593,8 @@ function getItemsAsyncWithHttpInfo()
     }
 }
 
-getItems();
-#getItemsWithHttpInfo();
-#getItemsAsync();
-#getItemsAsyncWithHttpInfo();
+
+searchItems();
+#searchItemsWithHttpInfo();
+#searchItemsAsync();
+#searchItemsAsyncWithHttpInfo();

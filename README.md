@@ -37,7 +37,7 @@ Simple example for [SearchItems](https://webservices.amazon.com/paapi5/documenta
 ```php
 <?php
 /**
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2023 Hemang Vyas. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ use TheCodeBunny\PaApi\Core\SearchItemsRequest;
 use TheCodeBunny\PaApi\Core\SearchItemsResource;
 use TheCodeBunny\PaApi\Configuration;
 
-require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
+// require_once(__DIR__ . '/vendor/autoload.php'); // change path as needed
 
 
 $config = new Configuration();
