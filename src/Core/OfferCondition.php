@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -13,10 +14,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace TheCodeBunny\PaApi\Core;
 
 use \ArrayAccess;
-use TheCodeBunny\PaApi\ObjectSerializer;
+use \TheCodeBunny\PaApi\ObjectSerializer;
 
 /**
  * OfferCondition Class Doc Comment
@@ -46,7 +48,8 @@ class OfferCondition implements ModelInterface, ArrayAccess
         'label' => 'string',
         'locale' => 'string',
         'value' => 'string',
-        'subCondition' => '\TheCodeBunny\PaApi\Core\OfferSubCondition'
+        'subCondition' => '\TheCodeBunny\PaApi\Core\OfferSubCondition',
+        'conditionNote' => '\TheCodeBunny\PaApi\Core\OfferConditionNote'
     ];
 
     /**
@@ -59,7 +62,8 @@ class OfferCondition implements ModelInterface, ArrayAccess
         'label' => null,
         'locale' => null,
         'value' => null,
-        'subCondition' => null
+        'subCondition' => null,
+        'conditionNote' => null
     ];
 
     /**
@@ -93,7 +97,8 @@ class OfferCondition implements ModelInterface, ArrayAccess
         'label' => 'Label',
         'locale' => 'Locale',
         'value' => 'Value',
-        'subCondition' => 'SubCondition'
+        'subCondition' => 'SubCondition',
+        'conditionNote' => 'ConditionNote'
     ];
 
     /**
@@ -106,7 +111,8 @@ class OfferCondition implements ModelInterface, ArrayAccess
         'label' => 'setLabel',
         'locale' => 'setLocale',
         'value' => 'setValue',
-        'subCondition' => 'setSubCondition'
+        'subCondition' => 'setSubCondition',
+        'conditionNote' => 'setConditionNote'
     ];
 
     /**
@@ -119,7 +125,8 @@ class OfferCondition implements ModelInterface, ArrayAccess
         'label' => 'getLabel',
         'locale' => 'getLocale',
         'value' => 'getValue',
-        'subCondition' => 'getSubCondition'
+        'subCondition' => 'getSubCondition',
+        'conditionNote' => 'getConditionNote'
     ];
 
     /**
@@ -163,9 +170,9 @@ class OfferCondition implements ModelInterface, ArrayAccess
         return self::$swaggerModelName;
     }
 
-    
 
-    
+
+
 
     /**
      * Associative array for storing property values
@@ -187,6 +194,7 @@ class OfferCondition implements ModelInterface, ArrayAccess
         $this->container['locale'] = isset($data['locale']) ? $data['locale'] : null;
         $this->container['value'] = isset($data['value']) ? $data['value'] : null;
         $this->container['subCondition'] = isset($data['subCondition']) ? $data['subCondition'] : null;
+        $this->container['conditionNote'] = isset($data['conditionNote']) ? $data['conditionNote'] : null;
     }
 
     /**
@@ -209,8 +217,7 @@ class OfferCondition implements ModelInterface, ArrayAccess
      */
     public function valid()
     {
-
-        return true;
+        return count($this->listInvalidProperties()) === 0;
     }
 
 
@@ -333,6 +340,30 @@ class OfferCondition implements ModelInterface, ArrayAccess
 
         return $this;
     }
+
+    /**
+     * Gets conditionNote
+     *
+     * @return \TheCodeBunny\PaApi\Core\OfferConditionNote
+     */
+    public function getConditionNote()
+    {
+        return $this->container['conditionNote'];
+    }
+
+    /**
+     * Sets conditionNote
+     *
+     * @param \TheCodeBunny\PaApi\Core\OfferConditionNote $conditionNote conditionNote
+     *
+     * @return $this
+     */
+    public function setConditionNote($conditionNote)
+    {
+        $this->container['conditionNote'] = $conditionNote;
+
+        return $this;
+    }
     /**
      * Returns true if offset exists. False otherwise.
      *
@@ -340,7 +371,7 @@ class OfferCondition implements ModelInterface, ArrayAccess
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -352,7 +383,7 @@ class OfferCondition implements ModelInterface, ArrayAccess
      *
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return isset($this->container[$offset]) ? $this->container[$offset] : null;
     }
@@ -365,7 +396,7 @@ class OfferCondition implements ModelInterface, ArrayAccess
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -381,7 +412,7 @@ class OfferCondition implements ModelInterface, ArrayAccess
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->container[$offset]);
     }
@@ -403,5 +434,3 @@ class OfferCondition implements ModelInterface, ArrayAccess
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
 }
-
-
