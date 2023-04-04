@@ -12,7 +12,7 @@
         "searchitems",
         "getvariations",
         "getbrowsenodes",
-        "TheCodeBunny\PaApi"
+        "TheCodeBunny\\PaApi"
     ],
     "homepage": "https://webservices.amazon.com/paapi5/documentation/index.html",
     "license": "Apache-2.0",
