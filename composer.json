@@ -1,6 +1,6 @@
 {
     "name": "thecodebunny/pa-api",
-    "description": "TheCodeBunny\PaApi 5.0 PHP SDK",
+    "description": "TheCodeBunny\\PaApi 5.0 PHP SDK",
     "keywords": [
         "amazon",
         "pa-api",
